@@ -23,8 +23,29 @@ export class UserController {
   }
 
   @Post('register/:id/:event')
-  async register(@Param('event') event: string, @Param('id') id: mongoose.Schema.Types.ObjectId) {
+  async register(
+    @Param('event') event: string,
+    @Param('id') id: mongoose.Schema.Types.ObjectId,
+  ) {
     const data = await this.userService.registerEvent(id, event);
+    return data;
+  }
+
+  @Post('completed/:id/:event')
+  async completed(
+    @Param('event') event: string,
+    @Param('id') id: mongoose.Schema.Types.ObjectId,
+  ) {
+    const data = await this.userService.completeEvent(id, event);
+    return data;
+  }
+
+  @Post('addPoints/:id/:points')
+  async addPoints(
+    @Param('points') points: Number,
+    @Param('id') id: mongoose.Schema.Types.ObjectId,
+  ) {
+    const data = await this.userService.addPoints(id, points);
     return data;
   }
 }

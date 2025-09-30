@@ -48,9 +48,11 @@ export class User {
   @Prop({type:[String]})
   registration: string[]; 
 
-  @Prop()
-  completed: mongoose.Schema.Types.Array;
+  @Prop({type:[String]})
+  completed:string[];
 
+  @Prop()
+  points: Number;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

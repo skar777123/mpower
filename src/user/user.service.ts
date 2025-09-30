@@ -51,4 +51,31 @@ export class UserService {
       };
     }
   }
+
+  async completeEvent(id, event) {
+    const data = await this.UserModel.findById(id);
+
+    if (data?.completed.includes(event)) {
+      return {
+        message: 'Already completed',
+      };
+    } else {
+      const data2 = await this.UserModel.findByIdAndUpdate(id, {
+        $push:{
+          completed: event
+        }
+      });
+      return {
+        data: data2,  
+        message: 'completed'
+      };
+    }
+  }
+
+  async addPoints(id,points){
+    const data = await this.UserModel.findByIdAndUpdate(id, {
+      $inc: {points:+points}
+    })
+    return data
+  }
 }
