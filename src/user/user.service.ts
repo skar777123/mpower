@@ -1,31 +1,54 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Student } from './user.schema';
+import { User } from './user.schema';
 import { Model } from 'mongoose';
 
 @Injectable()
-export class StudentService {
-  constructor(
-    @InjectModel(Student.name) private StudentModel: Model<Student>,
-  ) {}
+export class UserService {
+  constructor(@InjectModel(User.name) private UserModel: Model<User>) {}
 
-  async getCount() {
-    const data = await this.StudentModel.find();
-    return data.length;
+  async createUser(dto) {
+    const data = await this.UserModel.create(dto);
+    return {
+      data: data,
+      id: data._id,
+    };
   }
 
-  async findStudent(id) {
-    const data = await this.StudentModel.findById(id);
-    return data;
+  async loginUser(contact, password) {
+    const data = await this.UserModel.findOne({
+      contact: contact,
+    });
+    if (!data) {
+      return 'Not Found';
+    }
+    if (data) {
+      if (data.password === password) {
+        return {
+          data: data,
+          message: 'Succefully Login',
+        };
+      }
+    }
   }
 
-  async createStudent(dto) {
-    const data = await this.StudentModel.create(dto);
-    return data;
-  }
+  async registerEvent(id, event) {
+    const data = await this.UserModel.findById(id);
 
-  async updateStudent(id, dto) {
-    const data = await this.StudentModel.findByIdAndUpdate(id, dto);
-    return data;
+    if (data?.registration.includes(event)) {
+      return {
+        message: 'Already registered',
+      };
+    } else {
+      const data2 = await this.UserModel.findByIdAndUpdate(id, {
+        $push:{
+          registration: event
+        }
+      });
+      return {
+        data: data2,  
+        message: 'registered'
+      };
+    }
   }
 }

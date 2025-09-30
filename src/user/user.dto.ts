@@ -1,7 +1,7 @@
 export class studentDto {
   name: string;
-  course: string;
-  acaYear: string;
+  classs: string;
+  contact: Number;
+  stream:string;
   password: string;
-  mobile: Number;
 }

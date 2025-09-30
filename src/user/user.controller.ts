@@ -1,37 +1,30 @@
 import { Body, Controller, Get, Param, Patch, Post } from '@nestjs/common';
-import { StudentService } from './user.service';
+import { UserService } from './user.service';
 import mongoose from 'mongoose';
 import { studentDto } from './user.dto';
 
-@Controller('student')
-export class StudentController {
-  constructor(private studentService: StudentService) {}
-
-  @Get('count')
-  async count() {
-    const data = await this.studentService.getCount();
-    return data;
-  }
+@Controller('user')
+export class UserController {
+  constructor(private userService: UserService) {}
 
   @Post('create')
-  async createStudent(@Body() studentDto: studentDto) {
-    const data = await this.studentService.createStudent(studentDto);
+  async createUser(@Body() dto: studentDto) {
+    const data = await this.userService.createUser(dto);
     return data;
   }
 
-  @Get(':id')
-  async profile(@Param('id') id: mongoose.Schema.Types.ObjectId) {
-    const data = await this.studentService.findStudent(id);
-    return data;
-  }
-
-  //For admin
-  @Patch('update/:id')
-  async updateStudent(
-    @Param('id') id: mongoose.Schema.Types.ObjectId,
-    @Body() studentDto: studentDto,
+  @Post('login')
+  async login(
+    @Body('contact') contact: Number,
+    @Body('password') password: string,
   ) {
-    const data = await this.studentService.updateStudent(id, studentDto);
+    const data = await this.userService.loginUser(contact, password);
+    return data;
+  }
+
+  @Post('register/:id/:event')
+  async register(@Param('event') event: string, @Param('id') id: mongoose.Schema.Types.ObjectId) {
+    const data = await this.userService.registerEvent(id, event);
     return data;
   }
 }
