@@ -1,0 +1,2 @@
+pm2 init
+pm2 start dist/main.js -i max --name "nestjs-api-cluster" --watch
