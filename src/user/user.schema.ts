@@ -45,11 +45,11 @@ export class User {
   // @Prop()
   // registration: mongoose.Schema.Types.Array;
 
-  @Prop({type:[String]})
-  registration: string[]; 
+  @Prop({type:[Object]})
+  registration: object[]; 
 
-  @Prop({type:[String]})
-  completed:string[];
+  @Prop({type:[Object]})
+  completed:object[];
 
   @Prop()
   points: Number;

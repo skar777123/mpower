@@ -42,7 +42,10 @@ export class UserService {
     } else {
       const data2 = await this.UserModel.findByIdAndUpdate(id, {
         $push:{
-          registration: event
+          registration: {
+            event: event,
+            points: 0
+          }
         }
       });
       return {
@@ -62,7 +65,8 @@ export class UserService {
     } else {
       const data2 = await this.UserModel.findByIdAndUpdate(id, {
         $push:{
-          completed: event
+          completed: event,
+          points: 0
         }
       });
       return {
