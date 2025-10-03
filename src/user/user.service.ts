@@ -78,4 +78,14 @@ export class UserService {
     })
     return data
   }
+
+  async points(id){
+    const data = await this.UserModel.findById(id)
+    return data?.points
+  }
+
+  async leaderboard(){
+    const data = await this.UserModel.find().sort({points:-1})
+    return data
+  }
 }

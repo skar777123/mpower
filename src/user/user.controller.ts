@@ -48,4 +48,16 @@ export class UserController {
     const data = await this.userService.addPoints(id, points);
     return data;
   }
+
+  @Get('points/:id')
+  async points(@Param('id') id: mongoose.Schema.Types.ObjectId) {
+    const data = await this.userService.points(id);
+    return data;
+  }
+
+  @Get('/leaderboard')
+  async leaderboard(){
+    const data = await this.userService.leaderboard();
+    return data;
+  }
 }
