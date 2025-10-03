@@ -37,11 +37,9 @@ export class UserService {
   }
 
   async registerEvent(id, event_id, event) {
-    await this.UserModel.findById(id);
+    const data = await this.UserModel.findById(id);
     await this.EventsModel.findByIdAndUpdate(event_id, {
-      $push: {
-        registered: id,
-      },
+      $push: { registered: data },
     });
     const data2 = await this.UserModel.findByIdAndUpdate(id, {
       $push: {
@@ -95,10 +93,66 @@ export class UserService {
     return data;
   }
 
-  async eventRegister(name:string){
+  async eventRegister(name: string) {
     const data = await this.EventsModel.create({
-      event_name: name
+      event_name: name,
     });
     return data;
+  }
+
+  async participants() {
+    const data = await this.EventsModel.find();
+    return data.map((item) =>
+      item?.registered.map((item2) => {
+        return {
+          name: item2.name,
+          points: item2.points,
+        };
+      }),
+    );
+  }
+
+  async eachParticipants(event_id) {
+    const data = await this.EventsModel.findById(event_id);
+    return data?.registered.map((item) => {
+      return {
+        name: item.name,
+        points: item.points,
+      };
+    });
+  }
+
+  async eventCompleted(event_id, id, points: Number) {
+    const data = await this.EventsModel.findById(event_id);
+    const data2 = await this.UserModel.findByIdAndUpdate(id, {
+      $push: {
+        completed: {
+          event: data?.event_name,
+          points: points,
+        },
+      },
+    });
+    await this.EventsModel.findByIdAndUpdate(event_id, {
+      $pull: {
+        registered: id,
+      },
+      $push: {
+        leaderboard: {
+          name: data2?.name,
+          points: points,
+        },
+      },
+    });
+    await this.UserModel.findByIdAndUpdate(id, {
+      $inc: { points: +points },
+    });
+    return data2;
+  }
+
+  async eachLeaderboard(event_id) {
+    const data = await this.EventsModel.findById(event_id)
+      .select('leaderboard')
+      
+    return data?.leaderboard.sort((a, b) => Number(b.points) - Number(a.points));
   }
 }

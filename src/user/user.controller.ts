@@ -28,7 +28,7 @@ export class UserController {
     @Param('id') id: mongoose.Schema.Types.ObjectId,
     @Param('event_id') event_id: mongoose.Schema.Types.ObjectId,
   ) {
-    const data = await this.userService.registerEvent(id, event, event_id);
+    const data = await this.userService.registerEvent(id, event_id, event);
     return data;
   }
 
@@ -41,9 +41,9 @@ export class UserController {
     return data;
   }
 
-  @Post('addPoints/:id/:points')
+  @Post('addPoints/:id/')
   async addPoints(
-    @Param('points') points: Number,
+    @Body('points') points: Number,
     @Param('id') id: mongoose.Schema.Types.ObjectId,
   ) {
     const data = await this.userService.addPoints(id, points);
@@ -63,9 +63,40 @@ export class UserController {
   }
 
   @Post('event/:name')
-  async eventRegister(@Param('name') name:string){
+  async eventRegister(@Param('name') name: string) {
     const data = await this.userService.eventRegister(name);
     return data;
   }
-  
+
+  @Get('/event/participants')
+  async participants() {
+    const data = await this.userService.participants();
+    return data;
+  }
+
+  @Get('/event/participants/:event_id')
+  async eachParticipants(
+    @Param('event_id') event_id: mongoose.Schema.Types.ObjectId,
+  ) {
+    const data = await this.userService.eachParticipants(event_id);
+    return data;
+  }
+
+  @Post('/event/completed/:event_id/:id/')
+  async eventCompleted(
+    @Param('event_id') event_id: mongoose.Schema.Types.ObjectId,
+    @Param('id') id: mongoose.Schema.Types.ObjectId,
+    @Body('points') points: Number,
+  ) {
+    const data = await this.userService.eventCompleted(event_id, id, points);
+    return data;
+  }
+
+  @Post('/event/leaderboard/:event_id')
+  async eachLeaderboard(@Param('event_id') event_id: mongoose.Schema.Types.ObjectId){
+    const data = await this.userService.eachLeaderboard(event_id);
+    return data;
+  }
+
+
 }
