@@ -22,12 +22,13 @@ export class UserController {
     return data;
   }
 
-  @Post('register/:id/:event')
+  @Post('register/:id/:event/:event_id')
   async register(
     @Param('event') event: string,
     @Param('id') id: mongoose.Schema.Types.ObjectId,
+    @Param('event_id') event_id: mongoose.Schema.Types.ObjectId,
   ) {
-    const data = await this.userService.registerEvent(id, event);
+    const data = await this.userService.registerEvent(id, event, event_id);
     return data;
   }
 
@@ -56,8 +57,15 @@ export class UserController {
   }
 
   @Get('/leaderboard')
-  async leaderboard(){
+  async leaderboard() {
     const data = await this.userService.leaderboard();
     return data;
   }
+
+  @Post('event/:name')
+  async eventRegister(@Param('name') name:string){
+    const data = await this.userService.eventRegister(name);
+    return data;
+  }
+  
 }

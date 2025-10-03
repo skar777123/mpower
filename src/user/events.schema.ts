@@ -5,11 +5,14 @@ export class Events {
   @Prop()
   event_name: string;
 
-  @Prop({ type: Object })
-  leaderboard: object;
+  @Prop({ type: [Object] })
+  leaderboard: object[];
 
-  @Prop({ type: Object })
-  active_participant: object;
+  @Prop({ type: [Object] })
+  active_participant: object[];
+
+  @Prop({ type: [Object] })
+  registered: object[];
 }
 
 export const EventsSchema = SchemaFactory.createForClass(Events);
